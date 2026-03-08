@@ -6,39 +6,77 @@
     <title>Dicky News | Premium Link Unlocker</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* BAGIAN: ROOT VARS - Ubah warna tema di sini */
         :root { 
-            --google-blue: #4285F4; --google-red: #EA4335; 
-            --google-yellow: #FBBC05; --google-green: #34A853;
-            --glass: rgba(255, 255, 255, 0.85); --bg: #f8f9fa; --text: #1c1c1e;
+            --ios-blue: #007AFF; --glass: rgba(255, 255, 255, 0.85); 
+            --bg: #f2f2f7; --text: #1c1c1e; --green: #28a745; 
         }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg); font-family: 'Segoe UI', Roboto, sans-serif; overflow: hidden; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; overflow: hidden; }
         
-        /* BAGIAN: ANIMASI BACKGROUND */
-        #canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        #constellationCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         
-        .container { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
-        .glass-card { background: var(--glass); backdrop-filter: blur(15px); border-radius: 28px; padding: 32px; width: 100%; max-width: 450px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.5); }
+        .container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; position: relative; z-index: 1; }
+        .glass-card { background: var(--glass); backdrop-filter: blur(20px); border-radius: 40px; padding: 40px; width: 100%; max-width: 450px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid rgba(255, 255, 255, 0.3); }
+
+        @keyframes border-glow {
+            0% { border-color: var(--ios-blue); box-shadow: 0 0 5px var(--ios-blue); }
+            50% { border-color: #5856D6; box-shadow: 0 0 15px #5856D6; }
+            100% { border-color: var(--ios-blue); box-shadow: 0 0 5px var(--ios-blue); }
+        }
+
+        .task-item { background: #fff; border: 2px solid #e5e5ea; color: var(--text); padding: 18px; margin: 15px 0; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; width: 100%; font-weight: 600; opacity: 0.6; pointer-events: none; transition: 0.4s; }
+        .task-item.is-active { opacity: 1; pointer-events: auto; animation: border-glow 2s infinite ease-in-out; }
+        .task-item.is-done { opacity: 1; background: var(--green); border: none; color: #fff; }
+        .task-item.is-error { border: 2px solid #ff4d4d; opacity: 1; animation: pulse 1.5s infinite; background: #fff0f0; color: #ff4d4d; }
         
-        /* BAGIAN: KOMPONEN TUGAS */
-        .task-item { background: #fff; border: 2px solid #dadce0; padding: 16px; margin: 12px 0; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; opacity: 0.7; pointer-events: none; transition: 0.3s; }
-        .task-item.is-active { opacity: 1; pointer-events: auto; border: 2px solid var(--google-blue); }
-        .task-item.is-done { opacity: 1; background: var(--google-green); border: none; color: white; }
-        .is-error { border: 2px solid var(--google-red) !important; color: var(--google-red); }
+        @keyframes pulse { 0% { transform: scale(1); } 70% { transform: scale(1.02); } 100% { transform: scale(1); } }
         
-        .btn-main { background: var(--google-blue); color: white; border: none; padding: 16px; width: 100%; border-radius: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; display: none; }
+        .btn-main { background: var(--ios-blue); color: #fff; border: none; padding: 18px; width: 100%; border-radius: 20px; font-weight: bold; cursor: pointer; margin-top: 20px; display: none; }
+        .info-text { font-size: 14px; color: #666; margin-bottom: 20px; }
         
-        /* BAGIAN: WARNA IKON */
-        .yt { color: var(--google-red); } .ig { color: #E1306C; } .tk { color: #000; } .fb { color: #1877F2; }
+        .yt { color: #ff0000; } .ig { color: #e1306c; } .tk { color: #000000; } .fb { color: #1877f2; }
     </style>
 </head>
 <body>
 
-<canvas id="canvas"></canvas>
-<div class="container"><div class="glass-card" id="app"></div></div>
+<canvas id="constellationCanvas"></canvas>
+<div class="container">
+    <div class="glass-card" id="app"></div>
+</div>
 
 <script>
-    /* BAGIAN: DATA TUGAS - Ubah list social di sini */
+    const canvas = document.getElementById('constellationCanvas');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.onresize = resize; resize();
+
+    function animate() {
+        ctx.fillStyle = 'rgba(242, 242, 247, 0.2)'; 
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Spawn masif untuk efek hujan meteor
+        for(let i = 0; i < 15; i++) {
+            stars.push({
+                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 60, vy: (Math.random() - 0.5) * 60,
+                color: `hsl(${Math.random() * 360}, 80%, 60%)`, life: 1.0
+            });
+        }
+        
+        stars.forEach((s, i) => {
+            s.x += s.vx; s.y += s.vy; s.life -= 0.02;
+            ctx.beginPath();
+            ctx.moveTo(s.x, s.y);
+            ctx.lineTo(s.x - s.vx * 0.2, s.y - s.vy * 0.2);
+            ctx.strokeStyle = s.color;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            if(s.life <= 0) stars.splice(i, 1);
+        });
+        requestAnimationFrame(animate);
+    }
+    animate();
+
     const mySocials = [
         { n: "Subscribe YT Utama", i: "fab fa-youtube yt", action: "subscribe" },
         { n: "Subscribe YT Kedua", i: "fab fa-youtube yt", action: "subscribe" },
@@ -46,56 +84,20 @@
         { n: "Follow TikTok", i: "fab fa-tiktok tk", action: "follow" },
         { n: "Follow Facebook", i: "fab fa-facebook fb", action: "follow" }
     ];
-
-    /* BAGIAN: DAFTAR LINK - Urutan harus sesuai dengan mySocials */
     const links = [
-        "https://youtube.com/@dickynews",
-        "https://www.youtube.com/@GODickyNews",
-        "https://www.instagram.com/dickynews",
-        "https://www.tiktok.com/@dickynewsyt",
+        "https://youtube.com/@dickynews", "https://www.youtube.com/@GODickyNews",
+        "https://www.instagram.com/dickynews", "https://www.tiktok.com/@dickynewsyt",
         "https://www.facebook.com/dickynews45"
     ];
 
-    /* BAGIAN: ANIMASI CANVAS - Ubah jumlah & jenis partikel di sini */
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    let w, h;
-    function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
-    window.onresize = resize; resize();
-
-    let particles = [];
-    function init() {
-        for(let i=0; i<60; i++) {
-            particles.push({
-                x: Math.random()*w, y: Math.random()*h,
-                type: Math.floor(Math.random()*5),
-                color: ['#4285F4', '#EA4335', '#FBBC05', '#34A853'][Math.floor(Math.random()*4)],
-                angle: Math.random()*Math.PI*2
-            });
-        }
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, w, h);
-        particles.forEach(p => {
-            ctx.fillStyle = p.color;
-            if(p.type === 0) { ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill(); } 
-            else if(p.type === 1) { p.x += Math.cos(p.angle); p.y += Math.sin(p.angle); p.angle += 0.1; ctx.fillRect(p.x, p.y, 4, 4); }
-            else { ctx.beginPath(); ctx.arc(p.x, p.y, 8, 0, Math.PI*2); ctx.fill(); }
-        });
-        requestAnimationFrame(animate);
-    }
-    init(); animate();
-
-    /* BAGIAN: LOGIKA UI - Jangan ubah jika tidak paham fungsi */
     const params = new URLSearchParams(window.location.search);
     const app = document.getElementById("app");
 
     function renderUI() {
         if(!params.get("v")) {
-            app.innerHTML = `<h2>LINK GENERATOR</h2><input id="link" style="width:100%; padding:15px; border-radius:15px; border:1px solid #ddd; margin:10px 0; box-sizing:border-box;" placeholder="Paste URL Tujuan..."> <button class="btn-main" style="display:block; background:var(--text)" onclick="generate()">Generate Link</button><div id="res"></div>`;
+            app.innerHTML = `<h2>LINK GENERATOR</h2><input id="link" style="width:100%; padding:15px; border-radius:15px; border:1px solid #ddd; margin:10px 0; box-sizing:border-box;" placeholder="Paste URL Tujuan..."> <button class="btn-main" style="display:block; background:#1c1c1e" onclick="generate()">Generate Link</button><div id="res"></div>`;
         } else {
-            app.innerHTML = `<h2>VERIFIKASI</h2><p>Selesaikan langkah-langkah di bawah ini untuk membuka link WhatsApp Mod.</p><div id="tasks"></div><button id="finalLink" class="btn-main" onclick="window.location.href=atob(params.get('v'))">AKSES LINK TUJUAN</button>`;
+            app.innerHTML = `<h2>VERIFIKASI</h2><p class="info-text">Selesaikan langkah-langkah di bawah ini untuk membuka link WhatsApp Mod.</p><div id="tasks"></div><button id="finalLink" class="btn-main" onclick="window.location.href=atob(params.get('v'))">AKSES LINK TUJUAN</button>`;
             const tasksContainer = document.getElementById("tasks");
             mySocials.forEach((s, idx) => {
                 let b = document.createElement("button");
@@ -107,13 +109,13 @@
                     b.disabled = true;
                     let count = 15;
                     let timer = setInterval(() => {
-                        b.innerHTML = `Memverifikasi... ${count}s`;
+                        b.innerHTML = `Memverifikasi apakah kamu sudah ${s.action}... ${count}s`;
                         if(--count < 0) {
                             clearInterval(timer);
                             if(!b.dataset.fail) {
                                 b.dataset.fail = "true";
                                 b.classList.add("is-error");
-                                b.innerHTML = `Kamu belum ${s.action} :( Klik untuk coba lagi.`;
+                                b.innerHTML = `Kamu belum ${s.action} :( Silahkan klik tombol ini untuk ${s.action}.`;
                                 b.disabled = false;
                             } else {
                                 b.classList.remove("is-active", "is-error");
