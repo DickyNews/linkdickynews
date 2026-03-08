@@ -6,11 +6,11 @@
     <title>Dicky News | Premium Link Unlocker</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --glass: rgba(255, 255, 255, 0.7); --bg: #f2f2f7; --text: #1c1c1e; --yellow: #ffcc00; }
+        :root { --glass: rgba(255, 255, 255, 0.9); --bg: #f2f2f7; --text: #1c1c1e; --yellow: #ffcc00; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         #bg-light { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: linear-gradient(135deg, #e1e1e6 0%, #ffffff 100%); }
         .container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .glass-card { background: var(--glass); backdrop-filter: blur(20px); border-radius: 40px; padding: 40px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .glass-card { background: var(--glass); backdrop-filter: blur(20px); border-radius: 40px; padding: 40px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         
         /* Task Styles */
         .task-item { 
@@ -20,7 +20,19 @@
         }
         .task-item.is-active { opacity: 1; pointer-events: auto; border: 2px solid var(--yellow); }
         .task-item.is-done { opacity: 1; background: var(--yellow); border: none; }
-        .task-item.is-error { border: 2px solid #ff4d4d; opacity: 1; }
+        
+        /* Animasi dan Warna */
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.7); }
+            70% { transform: scale(1.02); box-shadow: 0 0 15px 5px rgba(255, 77, 77, 0.4); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
+        }
+        .task-item.is-error { border: 2px solid #ff4d4d; opacity: 1; animation: pulse 1.5s infinite; background: #fff0f0; }
+        
+        .fa-youtube { color: #ff0000; }
+        .fa-instagram { color: #e1306c; }
+        .fa-tiktok { color: #000000; }
+        .fa-facebook { color: #1877f2; }
         
         .btn-main { background: var(--text); color: #fff; border: none; padding: 18px; width: 100%; border-radius: 20px; font-weight: bold; cursor: pointer; margin-top: 20px; display: none; }
     </style>
@@ -46,7 +58,7 @@
 
     function renderUI() {
         if(!params.get("v")) {
-            app.innerHTML = `<h2>LINK GENERATOR</h2><input id="link" style="width:100%; padding:15px; border-radius:15px; border:1px solid #ddd; margin:10px 0;" placeholder="Paste URL Tujuan..."> <button class="btn-main" style="display:block" onclick="generate()">Generate Link</button><div id="res"></div>`;
+            app.innerHTML = `<h2>LINK GENERATOR</h2><input id="link" style="width:100%; padding:15px; border-radius:15px; border:1px solid #ddd; margin:10px 0; box-sizing:border-box;" placeholder="Paste URL Tujuan..."> <button class="btn-main" style="display:block" onclick="generate()">Generate Link</button><div id="res"></div>`;
         } else {
             app.innerHTML = `<h2>VERIFIKASI</h2><div id="tasks"></div><button id="finalLink" class="btn-main" onclick="window.location.href=atob(params.get('v'))">AKSES LINK TUJUAN</button>`;
             const tasksContainer = document.getElementById("tasks");
@@ -54,7 +66,7 @@
             mySocials.forEach((s, idx) => {
                 let b = document.createElement("button");
                 b.className = "task-item";
-                if(idx === 0) b.classList.add("is-active"); // Hanya langkah pertama yang terbuka
+                if(idx === 0) b.classList.add("is-active");
                 
                 b.innerHTML = `<span><i class="${s.i}" style="margin-right:10px"></i> ${s.n}</span> <i class="fas fa-lock"></i>`;
                 
@@ -76,7 +88,6 @@
                                 b.classList.add("is-done");
                                 b.innerHTML = `<span><i class="fas fa-check" style="margin-right:10px"></i> BERHASIL</span>`;
                                 
-                                // Membuka kunci langkah berikutnya
                                 let nextBtn = document.querySelectorAll(".task-item")[idx + 1];
                                 if(nextBtn) {
                                     nextBtn.classList.add("is-active");
@@ -94,7 +105,7 @@
 
     window.generate = () => { 
         let url = document.getElementById('link').value;
-        if(url) document.getElementById('res').innerHTML = `<p style="font-size:12px; margin-top:15px;">Link: <br>${window.location.origin + window.location.pathname}?v=${btoa(url)}</p>`;
+        if(url) document.getElementById('res').innerHTML = `<p style="font-size:12px; margin-top:15px; word-break:break-all;">Link:<br>${window.location.origin + window.location.pathname}?v=${btoa(url)}</p>`;
     };
     renderUI();
 </script>
