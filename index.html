@@ -12,7 +12,6 @@
         .container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .glass-card { background: var(--glass); backdrop-filter: blur(20px); border-radius: 40px; padding: 40px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         
-        /* Task Styles */
         .task-item { 
             background: #fff; border: 1px solid #eee; color: var(--text); padding: 18px; margin: 12px 0; 
             border-radius: 20px; display: flex; align-items: center; justify-content: space-between; 
@@ -21,7 +20,6 @@
         .task-item.is-active { opacity: 1; pointer-events: auto; border: 2px solid var(--yellow); }
         .task-item.is-done { opacity: 1; background: var(--yellow); border: none; }
         
-        /* Animasi dan Warna */
         @keyframes pulse {
             0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.7); }
             70% { transform: scale(1.02); box-shadow: 0 0 15px 5px rgba(255, 77, 77, 0.4); }
@@ -73,9 +71,9 @@
                 b.onclick = () => {
                     window.open(s.l, "_blank");
                     b.disabled = true;
-                    let count = 3;
+                    let count = 15; // Waktu tunggu 15 detik
                     let timer = setInterval(() => {
-                        b.innerHTML = `Mengecek... ${count}s`;
+                        b.innerHTML = `Menunggu... ${count}s`;
                         if(--count < 0) {
                             clearInterval(timer);
                             if(!b.dataset.fail) {
