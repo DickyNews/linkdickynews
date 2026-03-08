@@ -19,7 +19,7 @@
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
             background: var(--bg); color: var(--text); 
-            font-family: 'Roboto', sans-serif; 
+            font-family: 'Roboto', sans-serif; /* Penerapan Font Google */
             overflow: hidden; 
         }
         
@@ -36,7 +36,6 @@
         .glass-card { 
             background: var(--glass); 
             backdrop-filter: blur(25px); 
-            -webkit-backdrop-filter: blur(25px);
             border-radius: 40px; 
             padding: 40px; 
             width: 100%; 
@@ -50,7 +49,6 @@
         h2 { font-weight: 700; margin: 0 0 15px 0; font-size: 26px; }
         .desc { font-size: 14px; color: #3a3a3c; margin-bottom: 30px; line-height: 1.5; }
 
-        /* Struktur Tab Simetris */
         .task-item { 
             background: #fff; 
             border: 1.5px solid #e5e5ea; 
@@ -70,7 +68,6 @@
             color: var(--text);
             text-align: left;
             position: relative;
-            overflow: hidden;
         }
 
         .task-item.is-active { 
@@ -79,7 +76,6 @@
             box-shadow: 0 5px 15px rgba(0, 122, 255, 0.1);
         }
 
-        /* Efek Denyut Merah */
         @keyframes pulse-red {
             0% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.4); border-color: var(--red); }
             70% { box-shadow: 0 0 0 12px rgba(255, 59, 48, 0); }
@@ -100,11 +96,8 @@
             color: #fff; 
         }
 
-        .task-content { display: flex; align-items: center; flex: 1; z-index: 2; }
+        .task-content { display: flex; align-items: center; flex: 1; }
         .task-content i { font-size: 20px; margin-right: 15px; width: 25px; text-align: center; }
-
-        .chevron { font-size: 14px; opacity: 0.3; }
-        .is-done .chevron, .is-error .chevron { display: none; }
 
         .btn-main { 
             background: var(--ios-blue); 
@@ -120,7 +113,6 @@
             font-size: 16px;
         }
 
-        /* Ikon Warna */
         .yt { color: #ff0000; } .ig { color: #e1306c; } .tk { color: #000000; } .fb { color: #1877f2; }
         .is-done i { color: #fff !important; }
         .is-error i { color: var(--red) !important; }
@@ -135,7 +127,7 @@
 </div>
 
 <script>
-    /* ANIMASI PARTIKEL MASIF DARI BERBAGAI ARAH */
+    /* ANIMASI PARTIKEL LATAR BELAKANG */
     const canvas = document.getElementById('constellationCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -173,13 +165,12 @@
     }
     animate();
 
-    /* KONFIGURASI TUGAS */
     const mySocials = [
-        { n: "Subscribe YT Utama", i: "fab fa-youtube yt", link: "https://youtube.com/@dickynews" },
-        { n: "Subscribe YT Kedua", i: "fab fa-youtube yt", link: "https://www.youtube.com/@GODickyNews" },
-        { n: "Follow Instagram", i: "fab fa-instagram ig", link: "https://www.instagram.com/dickynews" },
-        { n: "Follow TikTok", i: "fab fa-tiktok tk", link: "https://www.tiktok.com/@dickynewsyt" },
-        { n: "Follow Facebook", i: "fab fa-facebook fb", link: "https://www.facebook.com/dickynews45" }
+        { n: "Subscribe YT Utama", i: "fab fa-youtube yt", link: "https://youtube.com/@dickynews", verb: "subscribe" },
+        { n: "Subscribe YT Kedua", i: "fab fa-youtube yt", link: "https://www.youtube.com/@GODickyNews", verb: "subscribe" },
+        { n: "Follow Instagram", i: "fab fa-instagram ig", link: "https://www.instagram.com/dickynews", verb: "follow" },
+        { n: "Follow TikTok", i: "fab fa-tiktok tk", link: "https://www.tiktok.com/@dickynewsyt", verb: "follow" },
+        { n: "Follow Facebook", i: "fab fa-facebook fb", link: "https://www.facebook.com/dickynews45", verb: "follow" }
     ];
 
     const params = new URLSearchParams(window.location.search);
@@ -196,13 +187,9 @@
                 let b = document.createElement("button");
                 b.className = "task-item";
                 if(idx === 0) b.classList.add("is-active");
-                b.dataset.attempt = "1"; // Penanda langkah verifikasi
+                b.dataset.attempt = "1";
                 
-                // Tampilan Awal
-                const setInitialState = () => {
-                    b.innerHTML = `<div class="task-content"><i class="${s.i}"></i><span>${s.n}</span></div><i class="fas fa-chevron-right chevron"></i>`;
-                };
-                setInitialState();
+                b.innerHTML = `<div class="task-content"><i class="${s.i}"></i><span>${s.n}</span></div>`;
                 
                 b.onclick = () => {
                     if(!b.classList.contains("is-active") || b.classList.contains("is-done") || b.disabled) return;
@@ -211,7 +198,7 @@
                     b.disabled = true;
                     b.classList.remove("is-error");
                     
-                    let count = 15; // Timer 15 Detik
+                    let count = 15;
                     let attempt = parseInt(b.dataset.attempt);
 
                     let timer = setInterval(() => {
@@ -222,12 +209,11 @@
                             b.disabled = false;
 
                             if(attempt === 1) {
-                                // GAGAL DI STEP 1
                                 b.classList.add("is-error");
-                                b.innerHTML = `<div class="task-content"><i class="fas fa-exclamation-circle"></i><span>Klik tombol ini untuk mengulang tugas ${s.n}</span></div>`;
+                                // PESAN GAGAL BARU
+                                b.innerHTML = `<div class="task-content"><i class="fas fa-exclamation-circle"></i><span>Sistem gagal memverifikasi :( klik tombol tugas ini lagi dan pastikan kamu sudah ${s.verb} ${s.n.split(' ').slice(1).join(' ')}</span></div>`;
                                 b.dataset.attempt = "2";
                             } else {
-                                // BERHASIL DI STEP 2
                                 b.classList.remove("is-active", "is-error");
                                 b.classList.add("is-done");
                                 b.innerHTML = `<div class="task-content"><i class="fas fa-check"></i><span>BERHASIL</span></div>`;
