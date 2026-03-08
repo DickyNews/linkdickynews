@@ -17,22 +17,13 @@
         .container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; position: relative; z-index: 1; }
         .glass-card { background: var(--glass); backdrop-filter: blur(20px); border-radius: 40px; padding: 40px; width: 100%; max-width: 450px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid rgba(255, 255, 255, 0.3); }
 
-        @keyframes border-glow {
-            0% { border-color: var(--ios-blue); box-shadow: 0 0 5px var(--ios-blue); }
-            50% { border-color: #5856D6; box-shadow: 0 0 15px #5856D6; }
-            100% { border-color: var(--ios-blue); box-shadow: 0 0 5px var(--ios-blue); }
-        }
-
         .task-item { background: #fff; border: 2px solid #e5e5ea; color: var(--text); padding: 18px; margin: 15px 0; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; width: 100%; font-weight: 600; opacity: 0.6; pointer-events: none; transition: 0.4s; }
-        .task-item.is-active { opacity: 1; pointer-events: auto; animation: border-glow 2s infinite ease-in-out; }
+        .task-item.is-active { opacity: 1; pointer-events: auto; border-color: var(--ios-blue); box-shadow: 0 0 10px rgba(0,122,255,0.2); }
         .task-item.is-done { opacity: 1; background: var(--green); border: none; color: #fff; }
-        .task-item.is-error { border: 2px solid #ff4d4d; opacity: 1; animation: pulse 1.5s infinite; background: #fff0f0; color: #ff4d4d; }
-        
-        @keyframes pulse { 0% { transform: scale(1); } 70% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        .task-item.is-error { border: 2px solid #ff4d4d; opacity: 1; background: #fff0f0; color: #ff4d4d; }
         
         .btn-main { background: var(--ios-blue); color: #fff; border: none; padding: 18px; width: 100%; border-radius: 20px; font-weight: bold; cursor: pointer; margin-top: 20px; display: none; }
         .info-text { font-size: 14px; color: #666; margin-bottom: 20px; }
-        
         .yt { color: #ff0000; } .ig { color: #e1306c; } .tk { color: #000000; } .fb { color: #1877f2; }
     </style>
 </head>
@@ -51,27 +42,29 @@
     window.onresize = resize; resize();
 
     function animate() {
-        ctx.fillStyle = 'rgba(242, 242, 247, 0.2)'; 
+        ctx.fillStyle = 'rgba(242, 242, 247, 0.15)'; 
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
-        // Spawn masif untuk efek hujan meteor
-        for(let i = 0; i < 15; i++) {
+        // Spawn partikel dengan skala dan ekor bervariasi
+        if(Math.random() < 0.2) {
             stars.push({
-                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 60, vy: (Math.random() - 0.5) * 60,
-                color: `hsl(${Math.random() * 360}, 80%, 60%)`, life: 1.0
+                x: Math.random() * canvas.width, y: -50,
+                vx: (Math.random() - 0.5) * 5, vy: Math.random() * 10 + 5,
+                size: Math.random() * 2 + 0.5,
+                tailLen: Math.random() * 20 + 5,
+                color: `hsl(${Math.random() * 360}, 70%, 60%)`
             });
         }
         
         stars.forEach((s, i) => {
-            s.x += s.vx; s.y += s.vy; s.life -= 0.02;
+            s.x += s.vx; s.y += s.vy;
             ctx.beginPath();
             ctx.moveTo(s.x, s.y);
-            ctx.lineTo(s.x - s.vx * 0.2, s.y - s.vy * 0.2);
+            ctx.lineTo(s.x - s.vx * s.tailLen * 0.1, s.y - s.vy * s.tailLen * 0.1);
             ctx.strokeStyle = s.color;
-            ctx.lineWidth = 1.5;
+            ctx.lineWidth = s.size;
             ctx.stroke();
-            if(s.life <= 0) stars.splice(i, 1);
+            if(s.y > canvas.height) stars.splice(i, 1);
         });
         requestAnimationFrame(animate);
     }
