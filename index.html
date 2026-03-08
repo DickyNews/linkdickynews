@@ -9,7 +9,7 @@
     <style>
         :root { 
             --ios-blue: #007AFF; 
-            --glass: rgba(255, 255, 255, 0.9); 
+            --glass: rgba(255, 255, 255, 0.92); 
             --bg: #f2f2f7; 
             --text: #1c1c1e; 
             --green: #28a745; 
@@ -36,45 +36,44 @@
             background: var(--glass); 
             backdrop-filter: blur(25px); 
             -webkit-backdrop-filter: blur(25px);
-            border-radius: 30px; 
-            padding: 35px; 
+            border-radius: 40px; 
+            padding: 40px; 
             width: 100%; 
-            max-width: 420px; 
+            max-width: 460px; 
             text-align: center; 
-            box-shadow: 0 15px 45px rgba(0,0,0,0.1); 
-            border: 1px solid rgba(255, 255, 255, 0.4); 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.08); 
+            border: 1px solid rgba(255, 255, 255, 0.5); 
             box-sizing: border-box;
         }
 
-        h2 { font-weight: 700; margin-bottom: 10px; font-size: 24px; }
-        p { font-size: 14px; color: #666; margin-bottom: 25px; line-height: 1.5; }
+        h2 { font-weight: 700; margin: 0 0 15px 0; font-size: 26px; }
+        .desc { font-size: 14px; color: #3a3a3c; margin-bottom: 30px; line-height: 1.5; }
 
-        #tasks { width: 100%; }
-
-        /* Tombol/Tab Simetris */
+        /* Struktur Tab Simetris */
         .task-item { 
             background: #fff; 
-            border: 1px solid #d1d1d6; 
-            padding: 16px 20px; 
-            margin: 10px 0; 
-            border-radius: 15px; 
+            border: 1.5px solid #e5e5ea; 
+            padding: 18px 22px; 
+            margin: 12px 0; 
+            border-radius: 20px; 
             display: flex; 
             align-items: center; 
             justify-content: space-between; 
             cursor: pointer; 
             opacity: 0.5; 
-            transition: all 0.3s ease; 
+            transition: all 0.4s ease; 
             width: 100%; 
             box-sizing: border-box; 
-            font-family: 'Roboto', sans-serif;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
+            color: var(--text);
+            text-align: left;
         }
 
         .task-item.is-active { 
             opacity: 1; 
             border-color: var(--ios-blue); 
-            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.15);
+            box-shadow: 0 5px 15px rgba(0, 122, 255, 0.1);
         }
 
         .task-item.is-done { 
@@ -84,22 +83,25 @@
             color: #fff; 
         }
 
+        .task-content { display: flex; align-items: center; flex: 1; }
+        .task-content i { font-size: 20px; margin-right: 15px; width: 25px; text-align: center; }
+
+        .chevron { font-size: 14px; opacity: 0.3; }
+        .is-done .chevron { display: none; }
+
         .btn-main { 
             background: var(--ios-blue); 
             color: #fff; 
             border: none; 
             padding: 18px; 
             width: 100%; 
-            border-radius: 15px; 
+            border-radius: 20px; 
             font-weight: 700; 
             cursor: pointer; 
             margin-top: 20px; 
             display: none; 
-            font-family: 'Roboto', sans-serif;
-            transition: background 0.3s;
+            font-size: 16px;
         }
-        
-        .btn-main:hover { background: #0062cc; }
 
         /* Ikon Warna */
         .yt { color: #ff0000; } .ig { color: #e1306c; } .tk { color: #000000; } .fb { color: #1877f2; }
@@ -111,75 +113,11 @@
 <canvas id="constellationCanvas"></canvas>
 
 <div class="container">
-    <div class="glass-card" id="app">
-        </div>
+    <div class="glass-card" id="app"></div>
 </div>
 
 <script>
-    const canvas = document.getElementById('constellationCanvas');
-    const ctx = canvas.getContext('2d');
-    let stars = [];
-
-    function resize() { 
-        canvas.width = window.innerWidth; 
-        canvas.height = window.innerHeight; 
-    }
-    window.onresize = resize; 
-    resize();
-
-    // Animasi Bintang Lebih Ramai & Smooth
-    function animate() {
-        // Efek trail lembut tanpa putus
-        ctx.fillStyle = 'rgba(242, 242, 247, 0.25)'; 
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        // Munculkan 2 bintang baru setiap frame untuk efek "Masif"
-        for(let i = 0; i < 2; i++) {
-            if(Math.random() < 0.4) {
-                let side = Math.floor(Math.random() * 4);
-                let x, y, vx, vy;
-                
-                // Spawn dari 4 arah berbeda
-                if(side === 0) { x = Math.random()*canvas.width; y = -20; vx = (Math.random()-0.5)*12; vy = Math.random()*12 + 5; } // Atas
-                else if(side === 1) { x = Math.random()*canvas.width; y = canvas.height+20; vx = (Math.random()-0.5)*12; vy = -Math.random()*12 - 5; } // Bawah
-                else if(side === 2) { x = -20; y = Math.random()*canvas.height; vx = Math.random()*12 + 5; vy = (Math.random()-0.5)*12; } // Kiri
-                else { x = canvas.width+20; y = Math.random()*canvas.height; vx = -Math.random()*12 - 5; vy = (Math.random()-0.5)*12; } // Kanan
-                
-                stars.push({ x, y, vx, vy, size: Math.random()*2 + 1, color: `hsl(${Math.random()*360}, 70%, 65%)` });
-            }
-        }
-        
-        stars.forEach((s, i) => {
-            ctx.beginPath();
-            ctx.strokeStyle = s.color;
-            ctx.lineWidth = s.size;
-            ctx.lineCap = 'round';
-            ctx.moveTo(s.x, s.y);
-            
-            s.x += s.vx; 
-            s.y += s.vy;
-            
-            // Gambar garis ke posisi baru (mencegah efek putus)
-            ctx.lineTo(s.x, s.y);
-            ctx.stroke();
-            
-            // Hapus jika keluar layar
-            if(s.x < -100 || s.x > canvas.width+100 || s.y < -100 || s.y > canvas.height+100) {
-                stars.splice(i, 1);
-            }
-        });
-        requestAnimationFrame(animate);
-    }
-    animate();
-
-    const mySocials = [
-        { n: "Subscribe YT Utama", i: "fab fa-youtube yt", action: "subscribe" },
-        { n: "Subscribe YT Kedua", i: "fab fa-youtube yt", action: "subscribe" },
-        { n: "Follow Instagram", i: "fab fa-instagram ig", action: "follow" },
-        { n: "Follow TikTok", i: "fab fa-tiktok tk", action: "follow" },
-        { n: "Follow Facebook", i: "fab fa-facebook fb", action: "follow" }
-    ];
-
+    /* KONFIGURASI LINK */
     const links = [
         "https://youtube.com/@dickynews", 
         "https://www.youtube.com/@GODickyNews",
@@ -188,23 +126,60 @@
         "https://www.facebook.com/dickynews45"
     ];
 
+    /* ANIMASI PARTIKEL MASIF */
+    const canvas = document.getElementById('constellationCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.onresize = resize; resize();
+
+    function animate() {
+        ctx.fillStyle = 'rgba(242, 242, 247, 0.2)'; 
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        if(particles.length < 120) {
+            let side = Math.floor(Math.random() * 4);
+            let x, y, vx, vy;
+            if(side === 0) { x = Math.random()*canvas.width; y = -20; vx = (Math.random()-0.5)*10; vy = Math.random()*12+3; }
+            else if(side === 1) { x = Math.random()*canvas.width; y = canvas.height+20; vx = (Math.random()-0.5)*10; vy = -Math.random()*12-3; }
+            else if(side === 2) { x = -20; y = Math.random()*canvas.height; vx = Math.random()*12+3; vy = (Math.random()-0.5)*10; }
+            else { x = canvas.width+20; y = Math.random()*canvas.height; vx = -Math.random()*12-3; vy = (Math.random()-0.5)*10; }
+            particles.push({ x, y, px: x, py: y, vx, vy, size: Math.random()*2+1, color: `hsl(${Math.random()*360}, 70%, 65%)` });
+        }
+        
+        particles.forEach((p, i) => {
+            p.px = p.x; p.py = p.y;
+            p.x += p.vx; p.y += p.vy;
+            ctx.beginPath();
+            ctx.strokeStyle = p.color;
+            ctx.lineWidth = p.size;
+            ctx.lineCap = 'round';
+            ctx.moveTo(p.px, p.py);
+            ctx.lineTo(p.x, p.y);
+            ctx.stroke();
+            if(p.x < -100 || p.x > canvas.width+100 || p.y < -100 || p.y > canvas.height+100) particles.splice(i, 1);
+        });
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    const mySocials = [
+        { n: "Subscribe YT Utama", i: "fab fa-youtube yt" },
+        { n: "Subscribe YT Kedua", i: "fab fa-youtube yt" },
+        { n: "Follow Instagram", i: "fab fa-instagram ig" },
+        { n: "Follow TikTok", i: "fab fa-tiktok tk" },
+        { n: "Follow Facebook", i: "fab fa-facebook fb" }
+    ];
+
     const params = new URLSearchParams(window.location.search);
     const app = document.getElementById("app");
 
     function renderUI() {
         if(!params.get("v")) {
-            app.innerHTML = `
-                <h2>LINK GENERATOR</h2>
-                <p>Tempel URL tujuan Anda untuk membuat link verifikasi.</p>
-                <input id="link" style="width:100%; padding:16px; border-radius:12px; border:1px solid #d1d1d6; margin-bottom:15px; box-sizing:border-box; font-size:15px;" placeholder="Paste URL Tujuan..."> 
-                <button class="btn-main" style="display:block; background:#1c1c1e" onclick="generate()">Generate Link</button>
-                <div id="res"></div>`;
+            app.innerHTML = `<h2>LINK GENERATOR</h2><p class="desc">Buat link unlocker Anda sendiri.</p><input id="link" style="width:100%; padding:18px; border-radius:15px; border:1.5px solid #d1d1d6; margin-bottom:15px; box-sizing:border-box;" placeholder="Paste URL Tujuan..."> <button class="btn-main" style="display:block; background:#1c1c1e" onclick="generate()">Generate Link</button><div id="res"></div>`;
         } else {
-            app.innerHTML = `
-                <h2>VERIFIKASI</h2>
-                <p>Selesaikan langkah-langkah di bawah ini untuk membuka link tujuan.</p>
-                <div id="tasks"></div>
-                <button id="finalLink" class="btn-main" onclick="window.location.href=atob(params.get('v'))">AKSES LINK TUJUAN</button>`;
+            app.innerHTML = `<h2>VERIFIKASI</h2><p class="desc">Selesaikan langkah-langkah di bawah ini untuk membuka link WhatsApp Mod.</p><div id="tasks"></div><button id="finalLink" class="btn-main" onclick="window.location.href=atob(params.get('v'))">AKSES LINK TUJUAN</button>`;
             
             const tasksContainer = document.getElementById("tasks");
             mySocials.forEach((s, idx) => {
@@ -212,27 +187,29 @@
                 b.className = "task-item";
                 if(idx === 0) b.classList.add("is-active");
                 
-                b.innerHTML = `<span><i class="${s.i}" style="margin-right:12px; font-size:18px;"></i> ${s.n}</span> <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3"></i>`;
+                b.innerHTML = `
+                    <div class="task-content"><i class="${s.i}"></i><span>${s.n}</span></div>
+                    <i class="fas fa-chevron-right chevron"></i>
+                `;
                 
                 b.onclick = () => {
-                    if(!b.classList.contains("is-active")) return;
+                    if(!b.classList.contains("is-active") || b.classList.contains("is-done")) return;
                     window.open(links[idx], "_blank");
-                    b.disabled = true;
+                    
                     let count = 10;
                     let timer = setInterval(() => {
-                        b.innerHTML = `<span>Memverifikasi... ${count}s</span>`;
+                        // TEKS VERIFIKASI DINAMIS DISINI
+                        b.innerHTML = `<div class="task-content"><span>Sedang verifikasi apakah kamu sudah ${s.n}... ${count}s</span></div>`;
+                        
                         if(--count < 0) {
                             clearInterval(timer);
                             b.classList.remove("is-active");
                             b.classList.add("is-done");
-                            b.innerHTML = `<span><i class="fas fa-check-circle" style="margin-right:10px"></i> BERHASIL</span>`;
+                            b.innerHTML = `<div class="task-content"><i class="fas fa-check"></i><span>BERHASIL</span></div>`;
                             
-                            let allTasks = document.querySelectorAll(".task-item");
-                            if(allTasks[idx + 1]) {
-                                allTasks[idx + 1].classList.add("is-active");
-                            } else {
-                                document.getElementById("finalLink").style.display = "block";
-                            }
+                            let next = document.querySelectorAll(".task-item")[idx + 1];
+                            if(next) next.classList.add("is-active");
+                            else document.getElementById("finalLink").style.display = "block";
                         }
                     }, 1000);
                 };
@@ -244,14 +221,10 @@
     window.generate = () => { 
         let url = document.getElementById('link').value;
         if(url) {
-            let finalLink = window.location.origin + window.location.pathname + "?v=" + btoa(url);
-            document.getElementById('res').innerHTML = `
-                <div style="margin-top:20px; padding:15px; background:#f0f0f5; border-radius:10px; font-size:12px; word-break:break-all;">
-                    <strong>Link Berhasil Dibuat:</strong><br>${finalLink}
-                </div>`;
+            let final = window.location.origin + window.location.pathname + "?v=" + btoa(url);
+            document.getElementById('res').innerHTML = `<div style="margin-top:20px; padding:15px; background:#fff; border-radius:15px; font-size:11px; word-break:break-all; text-align:left;"><strong>Link:</strong><br>${final}</div>`;
         }
     };
-
     renderUI();
 </script>
 </body>
