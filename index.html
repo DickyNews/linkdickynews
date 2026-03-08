@@ -6,96 +6,98 @@
     <title>Dicky News | Premium Link Unlocker</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --glass: rgba(255, 255, 255, 0.7); --bg: #f2f2f7; --text: #1c1c1e; --yellow: #ffcc00; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        #bg-light { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: linear-gradient(135deg, #e1e1e6 0%, #ffffff 100%); }
-        .container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        :root { 
+            --glass: rgba(255, 255, 255, 0.8); 
+            --bg: #f2f2f7; 
+            --text: #1c1c1e; 
+            --yellow: #ffcc00;
+            --yt: #ff0000; --ig: #e1306c; --tk: #000000; --fb: #1877f2;
+        }
+        body { margin: 0; background: var(--bg); font-family: -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         .glass-card { background: var(--glass); backdrop-filter: blur(20px); border-radius: 40px; padding: 40px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         
-        /* Task Styles */
         .task-item { 
-            background: #fff; border: 1px solid #eee; color: var(--text); padding: 18px; margin: 12px 0; 
-            border-radius: 20px; display: flex; align-items: center; justify-content: space-between; 
-            cursor: pointer; width: 100%; font-weight: 600; opacity: 0.5; pointer-events: none; transition: 0.3s;
+            background: #fff; border: 1px solid #ddd; padding: 18px; margin: 12px 0; border-radius: 20px; 
+            display: flex; align-items: center; justify-content: space-between; cursor: pointer; 
+            font-weight: 600; opacity: 0.5; pointer-events: none; transition: 0.3s;
         }
         .task-item.is-active { opacity: 1; pointer-events: auto; border: 2px solid var(--yellow); }
-        .task-item.is-done { opacity: 1; background: var(--yellow); border: none; }
-        .task-item.is-error { border: 2px solid #ff4d4d; opacity: 1; }
+        .task-item.is-done { opacity: 1; background: #fff; border: 2px solid #2ecc71; color: #2ecc71; }
         
+        /* Animasi Rasi Bintang Denyut */
+        .is-error { 
+            animation: pulse-aura 1.5s infinite ease-in-out;
+            border: 2px solid #ff4d4d !important; color: #ff4d4d !important;
+            position: relative; overflow: hidden;
+        }
+        @keyframes pulse-aura {
+            0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.4); }
+            50% { box-shadow: 0 0 15px 5px rgba(255, 77, 77, 0.2); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
+        }
+
         .btn-main { background: var(--text); color: #fff; border: none; padding: 18px; width: 100%; border-radius: 20px; font-weight: bold; cursor: pointer; margin-top: 20px; display: none; }
     </style>
 </head>
 <body>
 
-<div id="bg-light"></div>
-<div class="container">
-    <div class="glass-card" id="app"></div>
-</div>
+<div class="glass-card" id="app"></div>
 
 <script>
     const mySocials = [
-        { n: "Subscribe YT Utama", i: "fab fa-youtube", l: "https://youtube.com/@dickynews" },
-        { n: "Subscribe YT Kedua", i: "fab fa-youtube", l: "https://www.youtube.com/@GODickyNews" },
-        { n: "Follow Instagram", i: "fab fa-instagram", l: "https://www.instagram.com/dickynews" },
-        { n: "Follow TikTok", i: "fab fa-tiktok", l: "https://www.tiktok.com/@dickynewsyt" },
-        { n: "Follow Facebook", i: "fab fa-facebook", l: "https://www.facebook.com/dickynews45" }
+        { n: "Subscribe YT Utama", i: "fab fa-youtube", c: "#ff0000", l: "https://youtube.com/@dickynews" },
+        { n: "Subscribe YT Kedua", i: "fab fa-youtube", c: "#ff0000", l: "https://www.youtube.com/@GODickyNews" },
+        { n: "Follow Instagram", i: "fab fa-instagram", c: "#e1306c", l: "https://www.instagram.com/dickynews" },
+        { n: "Follow TikTok", i: "fab fa-tiktok", c: "#000000", l: "https://www.tiktok.com/@dickynewsyt" },
+        { n: "Follow Facebook", i: "fab fa-facebook", c: "#1877f2", l: "https://www.facebook.com/dickynews45" }
     ];
 
     const params = new URLSearchParams(window.location.search);
     const app = document.getElementById("app");
 
     function renderUI() {
-        if(!params.get("v")) {
-            app.innerHTML = `<h2>LINK GENERATOR</h2><input id="link" style="width:100%; padding:15px; border-radius:15px; border:1px solid #ddd; margin:10px 0;" placeholder="Paste URL Tujuan..."> <button class="btn-main" style="display:block" onclick="generate()">Generate Link</button><div id="res"></div>`;
-        } else {
-            app.innerHTML = `<h2>VERIFIKASI</h2><div id="tasks"></div><button id="finalLink" class="btn-main" onclick="window.location.href=atob(params.get('v'))">AKSES LINK TUJUAN</button>`;
-            const tasksContainer = document.getElementById("tasks");
+        app.innerHTML = `<h2>VERIFIKASI</h2><div id="tasks"></div><button id="finalLink" class="btn-main" onclick="window.location.href=atob(params.get('v'))">AKSES LINK TUJUAN</button>`;
+        const tasksContainer = document.getElementById("tasks");
+        
+        mySocials.forEach((s, idx) => {
+            let b = document.createElement("button");
+            b.className = "task-item";
+            if(idx === 0) b.classList.add("is-active");
             
-            mySocials.forEach((s, idx) => {
-                let b = document.createElement("button");
-                b.className = "task-item";
-                if(idx === 0) b.classList.add("is-active"); // Hanya langkah pertama yang terbuka
-                
-                b.innerHTML = `<span><i class="${s.i}" style="margin-right:10px"></i> ${s.n}</span> <i class="fas fa-lock"></i>`;
-                
-                b.onclick = () => {
-                    window.open(s.l, "_blank");
-                    b.disabled = true;
-                    let count = 3;
-                    let timer = setInterval(() => {
-                        b.innerHTML = `Mengecek... ${count}s`;
-                        if(--count < 0) {
-                            clearInterval(timer);
-                            if(!b.dataset.fail) {
-                                b.dataset.fail = "true";
-                                b.classList.add("is-error");
-                                b.innerHTML = `Gagal! KLIK ULANG ${s.n}`;
-                                b.disabled = false;
+            b.innerHTML = `<span><i class="${s.i}" style="color:${s.c}; margin-right:10px"></i> ${s.n}</span> <i class="fas fa-lock"></i>`;
+            
+            b.onclick = () => {
+                window.open(s.l, "_blank");
+                b.disabled = true;
+                let count = 3;
+                let timer = setInterval(() => {
+                    b.innerHTML = `Mengecek... ${count}s`;
+                    if(--count < 0) {
+                        clearInterval(timer);
+                        if(!b.dataset.fail) {
+                            b.dataset.fail = "true";
+                            b.classList.add("is-error");
+                            b.innerHTML = `Gagal! KLIK ULANG ${s.n}`;
+                            b.disabled = false;
+                        } else {
+                            b.classList.remove("is-active", "is-error");
+                            b.classList.add("is-done");
+                            b.innerHTML = `<span><i class="fas fa-check" style="color:#2ecc71; margin-right:10px"></i> BERHASIL</span>`;
+                            
+                            let nextBtn = document.querySelectorAll(".task-item")[idx + 1];
+                            if(nextBtn) {
+                                nextBtn.classList.add("is-active");
+                                nextBtn.querySelector('.fa-lock').style.color = "#ffcc00"; // Gembok aktif jadi kuning
                             } else {
-                                b.classList.remove("is-active", "is-error");
-                                b.classList.add("is-done");
-                                b.innerHTML = `<span><i class="fas fa-check" style="margin-right:10px"></i> BERHASIL</span>`;
-                                
-                                // Membuka kunci langkah berikutnya
-                                let nextBtn = document.querySelectorAll(".task-item")[idx + 1];
-                                if(nextBtn) {
-                                    nextBtn.classList.add("is-active");
-                                } else {
-                                    document.getElementById("finalLink").style.display = "block";
-                                }
+                                document.getElementById("finalLink").style.display = "block";
                             }
                         }
-                    }, 1000);
-                };
-                tasksContainer.appendChild(b);
-            });
-        }
+                    }
+                }, 1000);
+            };
+            tasksContainer.appendChild(b);
+        });
     }
-
-    window.generate = () => { 
-        let url = document.getElementById('link').value;
-        if(url) document.getElementById('res').innerHTML = `<p style="font-size:12px; margin-top:15px;">Link: <br>${window.location.origin + window.location.pathname}?v=${btoa(url)}</p>`;
-    };
     renderUI();
 </script>
 </body>
