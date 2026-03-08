@@ -8,232 +8,88 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        :root {
-            --primary-red: #ff4d4d;
-            --bg-light: #f4f7f6;
-            --card-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { background: white; width: 100%; max-width: 500px; border-radius: 20px; padding: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); text-align: center; }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-light);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            width: 100%;
-            max-width: 500px;
-            border-radius: 30px;
-            padding: 40px 30px;
-            box-shadow: var(--card-shadow);
-            text-align: center;
-        }
-
-        .header-icon {
-            font-size: 60px;
-            color: #ffcc00;
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            font-size: 24px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        p.subtitle {
-            font-size: 14px;
-            color: #888;
-            margin-bottom: 30px;
-        }
-
-        /* --- BAGIAN KOLOM GAGAL (DENYUT RASI BINTANG) --- */
+        /* Tampilan Kolom Gagal */
         .alert-gagal {
             position: relative;
             background: #fff5f5;
-            border: 2.5px solid var(--primary-red);
-            color: var(--primary-red);
-            padding: 18px;
-            border-radius: 15px;
+            border: 2px solid #ff4d4d;
+            color: #ff4d4d;
+            padding: 15px;
+            border-radius: 12px;
             font-weight: 700;
-            margin-bottom: 20px;
             cursor: pointer;
             overflow: hidden;
-            display: flex;
+            display: flex; /* Default tampil */
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            z-index: 1;
-            /* Animasi Denyut Utama */
+            gap: 10px;
+            margin-bottom: 20px;
             animation: pulse-aura 2s infinite ease-in-out;
-            transition: transform 0.2s ease;
+            z-index: 1;
         }
 
-        .alert-gagal:active {
-            transform: scale(0.97);
-        }
-
-        /* Partikel Rasi Bintang */
         .alert-gagal::before {
             content: '';
             position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background-image: 
-                radial-gradient(circle, var(--primary-red) 1.5px, transparent 1.5px),
-                radial-gradient(circle, var(--primary-red) 1px, transparent 1px);
-            background-size: 50px 50px;
-            background-position: 0 0, 25px 25px;
-            opacity: 0.15;
+            inset: -20px;
+            background-image: radial-gradient(circle, #ff4d4d 1.5px, transparent 1.5px);
+            background-size: 40px 40px;
+            opacity: 0.2;
             z-index: -1;
-            animation: star-rotate 20s linear infinite;
-        }
-
-        /* Efek Kilauan Nebula */
-        .alert-gagal::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at center, rgba(255, 77, 77, 0.15) 0%, transparent 70%);
-            animation: twinkle 3s infinite alternate;
+            animation: star-rotate 15s linear infinite;
         }
 
         @keyframes pulse-aura {
-            0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.4); transform: scale(1); }
-            50% { box-shadow: 0 0 20px 5px rgba(255, 77, 77, 0); transform: scale(1.02); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); transform: scale(1); }
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.4); }
+            50% { transform: scale(1.02); box-shadow: 0 0 10px 5px rgba(255, 77, 77, 0.3); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
         }
 
-        @keyframes star-rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+        @keyframes star-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        @keyframes twinkle {
-            0% { opacity: 0.2; }
-            100% { opacity: 0.7; }
-        }
-
-        /* --- LIST ITEMS --- */
-        .list-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .list-item {
-            background: #fdfdfd;
-            border: 1px solid #eee;
-            padding: 15px 20px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: #555;
-            font-weight: 600;
-        }
-
-        .list-item i.brand {
-            font-size: 20px;
-            margin-right: 15px;
-        }
-
-        .list-item .left-content {
-            display: flex;
-            align-items: center;
-        }
-
-        .fa-youtube { color: #ff0000; }
-        .fa-instagram { color: #e1306c; }
-        .fa-tiktok { color: #000; }
-        .fa-facebook { color: #1877f2; }
-        .fa-lock { color: #ccc; font-size: 14px; }
-
-        .footer-text {
-            margin-top: 30px;
-            font-size: 12px;
-            color: #999;
-            line-height: 1.5;
-        }
-
-        /* Responsive HP */
-        @media (max-width: 480px) {
-            .container {
-                padding: 30px 20px;
-                border-radius: 20px;
-            }
-            h1 { font-size: 20px; }
-            .alert-gagal { font-size: 14px; padding: 15px; }
-        }
+        /* List Misi */
+        .item { padding: 15px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header-icon">
-            <i class="fas fa-shield-alt"></i>
-        </div>
-        
-        <h1>Verifikasi Ganda</h1>
-        <p class="subtitle">Selesaikan langkah satu per satu untuk membuka link</p>
+    <div class="container" id="mainContent">
+        <h2>Verifikasi Ganda</h2>
+        <p>Selesaikan langkah untuk membuka link.</p>
+        <br>
 
-        <div class="alert-gagal" onclick="location.reload()">
+        <div class="alert-gagal" id="btnGagal" onclick="verify()">
             <i class="fas fa-exclamation-circle"></i>
             <span>Gagal! Klik ulang Subscribe YT Utama</span>
         </div>
 
-        <div class="list-container">
-            <div class="list-item">
-                <div class="left-content">
-                    <i class="fab fa-youtube brand"></i>
-                    <span>Subscribe YT Kedua</span>
-                </div>
-                <i class="fas fa-lock"></i>
-            </div>
-
-            <div class="list-item">
-                <div class="left-content">
-                    <i class="fab fa-instagram brand"></i>
-                    <span>Follow Instagram</span>
-                </div>
-                <i class="fas fa-lock"></i>
-            </div>
-
-            <div class="list-item">
-                <div class="left-content">
-                    <i class="fab fa-tiktok brand"></i>
-                    <span>Follow TikTok</span>
-                </div>
-                <i class="fas fa-lock"></i>
-            </div>
-
-            <div class="list-item">
-                <div class="left-content">
-                    <i class="fab fa-facebook brand"></i>
-                    <span>Follow Facebook</span>
-                </div>
-                <i class="fas fa-lock"></i>
-            </div>
-        </div>
-
-        <div class="footer-text">
-            <i class="fas fa-info-circle"></i><br>
-            Selesaikan misi yang aktif.<br>
-            Misi berikutnya akan terbuka otomatis.
-        </div>
+        <div class="item"><span>Subscribe YT Kedua</span><i class="fas fa-lock"></i></div>
+        <div class="item"><span>Follow Instagram</span><i class="fas fa-lock"></i></div>
     </div>
 
+    <script>
+        // Cek status saat halaman dimuat
+        const box = document.getElementById('btnGagal');
+        
+        // Jika sudah pernah diverifikasi, hilangkan box gagal
+        if (localStorage.getItem('verified') === 'true') {
+            box.style.display = 'none';
+        }
+
+        function verify() {
+            // Arahkan ke link tujuan
+            window.open('https://youtube.com/@ChannelAnda', '_blank');
+            
+            // Simpan status sukses
+            localStorage.setItem('verified', 'true');
+            
+            // Sembunyikan box
+            box.style.display = 'none';
+        }
+    </script>
 </body>
 </html>
