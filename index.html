@@ -1,243 +1,161 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dicky News | Premium Link Unlocker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root { 
-            --ios-blue: #007AFF; 
-            --glass: rgba(255, 255, 255, 0.92); 
-            --bg: #f2f2f7; 
-            --text: #1c1c1e; 
-            --green: #28a745; 
-            --red: #ff3b30;
-        }
-        
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            background: var(--bg); color: var(--text); 
-            font-family: 'Roboto', sans-serif; /* Penerapan Font Google */
-            overflow: hidden; 
-        }
-        
-        #constellationCanvas { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            z-index: 0; pointer-events: none; 
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dicky News | Premium Link Unlocker</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* --- 1. TEMA & DESAIN --- */
+:root {
+  --blue: #007AFF;
+  --green: #28a745;
+  --red: #ff3b30;
+  --bg: #f2f2f7;
+}
 
-        .container { 
-            min-height: 100vh; display: flex; align-items: center; 
-            justify-content: center; padding: 20px; position: relative; z-index: 1; 
-        }
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background: var(--bg);
+  overflow: hidden;
+}
 
-        .glass-card { 
-            background: var(--glass); 
-            backdrop-filter: blur(25px); 
-            border-radius: 40px; 
-            padding: 40px; 
-            width: 100%; 
-            max-width: 480px; 
-            text-align: center; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.08); 
-            border: 1px solid rgba(255, 255, 255, 0.5); 
-            box-sizing: border-box;
-        }
+/* --- 2. CANVAS ANIMASI --- */
+#constCanvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+}
 
-        h2 { font-weight: 700; margin: 0 0 15px 0; font-size: 26px; }
-        .desc { font-size: 14px; color: #3a3a3c; margin-bottom: 30px; line-height: 1.5; }
+/* --- 3. KARTU UTAMA --- */
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+}
 
-        .task-item { 
-            background: #fff; 
-            border: 1.5px solid #e5e5ea; 
-            padding: 18px 22px; 
-            margin: 12px 0; 
-            border-radius: 20px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            cursor: pointer; 
-            opacity: 0.5; 
-            transition: all 0.3s ease; 
-            width: 100%; 
-            box-sizing: border-box; 
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text);
-            text-align: left;
-            position: relative;
-        }
+.glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  border-radius: 30px;
+  padding: 30px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
 
-        .task-item.is-active { 
-            opacity: 1; 
-            border-color: var(--ios-blue); 
-            box-shadow: 0 5px 15px rgba(0, 122, 255, 0.1);
-        }
+/* --- 4. TOMBOL TUGAS --- */
+.task-item {
+  display: flex;
+  align-items: center;
+  padding: 18px;
+  margin: 12px 0;
+  border-radius: 20px;
+  border: 2px solid #ddd;
+  background: white;
+  cursor: pointer;
+  transition: 0.3s;
+  opacity: 0.5;
+}
 
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.4); border-color: var(--red); }
-            70% { box-shadow: 0 0 0 12px rgba(255, 59, 48, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); border-color: var(--red); }
-        }
+.task-item.is-active {
+  opacity: 1;
+  border-color: var(--blue);
+  box-shadow: 0 5px 15px rgba(0, 122, 255, 0.1);
+}
 
-        .task-item.is-error { 
-            animation: pulse-red 1.5s infinite;
-            border-color: var(--red) !important;
-            color: var(--red) !important;
-            opacity: 1 !important;
-        }
+.task-item.is-done {
+  background: var(--green);
+  color: white;
+  border: none;
+  opacity: 1;
+}
 
-        .task-item.is-done { 
-            opacity: 1; 
-            background: var(--green); 
-            border: none; 
-            color: #fff; 
-        }
-
-        .task-content { display: flex; align-items: center; flex: 1; }
-        .task-content i { font-size: 20px; margin-right: 15px; width: 25px; text-align: center; }
-
-        .btn-main { 
-            background: var(--ios-blue); 
-            color: #fff; 
-            border: none; 
-            padding: 18px; 
-            width: 100%; 
-            border-radius: 20px; 
-            font-weight: 700; 
-            cursor: pointer; 
-            margin-top: 20px; 
-            display: none; 
-            font-size: 16px;
-        }
-
-        .yt { color: #ff0000; } .ig { color: #e1306c; } .tk { color: #000000; } .fb { color: #1877f2; }
-        .is-done i { color: #fff !important; }
-        .is-error i { color: var(--red) !important; }
-    </style>
+.task-item.is-error {
+  border-color: var(--red);
+  color: var(--red);
+  opacity: 1;
+}
+</style>
 </head>
-<body>
 
-<canvas id="constellationCanvas"></canvas>
+<body>
+<canvas id="constCanvas"></canvas>
 
 <div class="container">
-    <div class="glass-card" id="app"></div>
+  <div class="glass-card" id="app"></div>
 </div>
 
 <script>
-    /* ANIMASI PARTIKEL LATAR BELAKANG */
-    const canvas = document.getElementById('constellationCanvas');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
+/* --- KONFIGURASI TUGAS --- */
+const tasks = [
+  { n: "Subscribe YT Utama", link: "https://youtube.com/@dickynews", verb: "subscribe" },
+  { n: "Subscribe YT Kedua", link: "https://youtube.com/@GODickyNews", verb: "subscribe" },
+  { n: "Follow Instagram", link: "https://instagram.com/dickynews", verb: "follow" }
+];
 
-    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    window.onresize = resize; resize();
+/* --- LOGIKA SISTEM --- */
+const app = document.getElementById("app");
+const params = new URLSearchParams(window.location.search);
 
-    function animate() {
-        ctx.fillStyle = 'rgba(242, 242, 247, 0.25)'; 
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        if(particles.length < 150) {
-            let side = Math.floor(Math.random() * 4);
-            let x, y, vx, vy;
-            if(side === 0) { x = Math.random()*canvas.width; y = -20; vx = (Math.random()-0.5)*12; vy = Math.random()*10+5; }
-            else if(side === 1) { x = Math.random()*canvas.width; y = canvas.height+20; vx = (Math.random()-0.5)*12; vy = -Math.random()*10-5; }
-            else if(side === 2) { x = -20; y = Math.random()*canvas.height; vx = Math.random()*10+5; vy = (Math.random()-0.5)*12; }
-            else { x = canvas.width+20; y = Math.random()*canvas.height; vx = -Math.random()*10-5; vy = (Math.random()-0.5)*12; }
-            particles.push({ x, y, px: x, py: y, vx, vy, size: Math.random()*2+1, color: `hsl(${Math.random()*360}, 70%, 65%)` });
-        }
-        
-        particles.forEach((p, i) => {
-            p.px = p.x; p.py = p.y;
-            p.x += p.vx; p.y += p.vy;
-            ctx.beginPath();
-            ctx.strokeStyle = p.color;
-            ctx.lineWidth = p.size;
-            ctx.lineCap = 'round';
-            ctx.moveTo(p.px, p.py);
-            ctx.lineTo(p.x, p.y);
-            ctx.stroke();
-            if(p.x < -100 || p.x > canvas.width+100 || p.y < -100 || p.y > canvas.height+100) particles.splice(i, 1);
-        });
-        requestAnimationFrame(animate);
-    }
-    animate();
+function render() {
+  // Mode Generator
+  if(!params.get("v")) {
+    app.innerHTML = `<h2>Generator Link</h2>
+    <input id='url' style='width:100%; padding:10px; margin:10px 0;'>
+    <button onclick='generate()' style='width:100%; padding:10px;'>Buat Link</button>
+    <div id='res'></div>`;
+  } 
+  // Mode Verifikasi
+  else {
+    app.innerHTML = `<h2>SISTEM VERIFIKASI</h2>`;
+    tasks.forEach((t, i) => {
+      let b = document.createElement("div");
+      b.className = "task-item" + (i === 0 ? " is-active" : "");
+      b.innerHTML = `<span>${t.n}</span>`;
+      b.dataset.state = "start";
+      
+      b.onclick = () => {
+        if(b.classList.contains("is-done") || b.disabled) return;
+        window.open(t.link, "_blank");
+        b.disabled = true;
+        let s = 15;
+        let timer = setInterval(() => {
+          b.innerHTML = `Verifikasi ${t.verb}... ${s}s`;
+          if(s-- <= 0) {
+            clearInterval(timer);
+            b.disabled = false;
+            if(b.dataset.state === "start") {
+              b.className = "task-item is-error";
+              b.innerHTML = `Gagal! Klik lagi & ${t.verb} ${t.n}`;
+              b.dataset.state = "retry";
+            } else {
+              b.className = "task-item is-done";
+              b.innerHTML = `BERHASIL`;
+              if(app.children[i+1]) app.children[i+1].classList.add("is-active");
+            }
+          }
+        }, 1000);
+      };
+      app.appendChild(b);
+    });
+  }
+}
 
-    const mySocials = [
-        { n: "Subscribe YouTube Utama", i: "fab fa-youtube yt", link: "https://youtube.com/@dickynews", verb: "subscribe" },
-        { n: "Subscribe YouTube Kedua", i: "fab fa-youtube yt", link: "https://www.youtube.com/@GODickyNews", verb: "subscribe" },
-        { n: "Follow Instagram", i: "fab fa-instagram ig", link: "https://www.instagram.com/dickynews", verb: "follow" },
-        { n: "Follow TikTok", i: "fab fa-tiktok tk", link: "https://www.tiktok.com/@dickynewsyt", verb: "follow" },
-        { n: "Follow Facebook", i: "fab fa-facebook fb", link: "https://www.facebook.com/dickynews45", verb: "follow" }
-    ];
+function generate() {
+  let url = document.getElementById('url').value;
+  let res = window.location.origin + window.location.pathname + "?v=" + btoa(url);
+  document.getElementById('res').innerText = res;
+}
 
-    const params = new URLSearchParams(window.location.search);
-    const app = document.getElementById("app");
-
-    function renderUI() {
-        if(!params.get("v")) {
-            app.innerHTML = `<h2>LINK GENERATOR</h2><p class="desc">Tempel URL tujuan untuk membuat link unlocker.</p><input id="link" style="width:100%; padding:18px; border-radius:15px; border:1.5px solid #d1d1d6; margin-bottom:15px; box-sizing:border-box;" placeholder="Paste URL Tujuan..."> <button class="btn-main" style="display:block; background:#1c1c1e" onclick="generate()">Generate Link</button><div id="res"></div>`;
-        } else {
-            app.innerHTML = `<h2>SISTEM VERIFIKASI</h2><p class="desc">Selesaikan tugas di bawah ini untuk membuka link WhatsApp Mod.</p><div id="tasks"></div><button id="finalLink" class="btn-main" onclick="window.location.href=atob(params.get('v'))">AKSES LINK TUJUAN</button>`;
-            
-            const tasksContainer = document.getElementById("tasks");
-            mySocials.forEach((s, idx) => {
-                let b = document.createElement("button");
-                b.className = "task-item";
-                if(idx === 0) b.classList.add("is-active");
-                b.dataset.attempt = "1";
-                
-                b.innerHTML = `<div class="task-content"><i class="${s.i}"></i><span>${s.n}</span></div>`;
-                
-                b.onclick = () => {
-                    if(!b.classList.contains("is-active") || b.classList.contains("is-done") || b.disabled) return;
-                    
-                    window.open(s.link, "_blank");
-                    b.disabled = true;
-                    b.classList.remove("is-error");
-                    
-                    let count = 15;
-                    let attempt = parseInt(b.dataset.attempt);
-
-                    let timer = setInterval(() => {
-                        b.innerHTML = `<div class="task-content"><span>Sedang verifikasi apakah kamu sudah ${s.n}... ${count}s</span></div>`;
-                        
-                        if(count-- <= 0) {
-                            clearInterval(timer);
-                            b.disabled = false;
-
-                            if(attempt === 1) {
-                                b.classList.add("is-error");
-                                // PESAN GAGAL BARU
-                                b.innerHTML = `<div class="task-content"><i class="fas fa-exclamation-circle"></i><span>Sistem gagal memverifikasi :( klik tombol tugas ini lagi dan pastikan kamu sudah ${s.verb} ${s.n.split(' ').slice(1).join(' ')}</span></div>`;
-                                b.dataset.attempt = "2";
-                            } else {
-                                b.classList.remove("is-active", "is-error");
-                                b.classList.add("is-done");
-                                b.innerHTML = `<div class="task-content"><i class="fas fa-check"></i><span>BERHASIL</span></div>`;
-                                
-                                let next = document.querySelectorAll(".task-item")[idx + 1];
-                                if(next) next.classList.add("is-active");
-                                else document.getElementById("finalLink").style.display = "block";
-                            }
-                        }
-                    }, 1000);
-                };
-                tasksContainer.appendChild(b);
-            });
-        }
-    }
-
-    window.generate = () => { 
-        let url = document.getElementById('link').value;
-        if(url) {
-            let final = window.location.origin + window.location.pathname + "?v=" + btoa(url);
-            document.getElementById('res').innerHTML = `<div style="margin-top:20px; padding:15px; background:#fff; border-radius:15px; font-size:11px; word-break:break-all; text-align:left;"><strong>Link Anda:</strong><br>${final}</div>`;
-        }
-    };
-    renderUI();
+render();
 </script>
 </body>
 </html>
