@@ -2,230 +2,238 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dicky News | Premium Link Unlocker</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi Ganda - Dicky News</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         :root {
-            --glass: rgba(255, 255, 255, 0.75);
-            --bg: #f2f2f7;
-            --text: #1c1c1e;
-            --yellow: #ffcc00;
-            --border-color: rgba(0, 0, 0, 0.1);
-            --card-shadow: 0 10px 40px rgba(0,0,0,0.08);
-        }
-        
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body, html { 
-            margin: 0; padding: 0; width: 100%; min-height: 100vh; 
-            background: var(--bg); color: var(--text); 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            overflow-x: hidden; display: flex; align-items: center; justify-content: center;
+            --primary-red: #ff4d4d;
+            --bg-light: #f4f7f6;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        /* Background Animasi Halus */
-        #bg-light { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; 
-            background: linear-gradient(135deg, #e1e1e6 0%, #ffffff 100%); 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
 
-        .wrapper { width: 90%; max-width: 400px; padding: 20px 0; z-index: 10; perspective: 1000px; }
-
-        .glass-card {
-            background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255,255,255,0.4); border-radius: 35px; padding: 35px 25px;
-            width: 100%; text-align: center; box-shadow: var(--card-shadow);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        body {
+            background-color: var(--bg-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
         }
 
-        /* Ikon Header Animasi Mengambang */
-        .header-icon { 
-            font-size: 45px; color: var(--yellow); margin-bottom: 15px; 
-            filter: drop-shadow(0 4px 6px rgba(255,204,0,0.3)); 
-            animation: float 3s ease-in-out infinite; 
-        }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-
-        h2 { font-size: 20px; font-weight: 800; letter-spacing: 1px; color: var(--text); margin: 0 0 5px 0; }
-        .sub-text { font-size: 13px; color: #8e8e93; margin-bottom: 25px; display: block; }
-
-        /* Grup List Tugas bergaya iOS */
-        .task-list {
-            background: rgba(255,255,255,0.5);
-            border-radius: 20px; border: 1px solid var(--border-color);
-            overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        .container {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 30px;
+            padding: 40px 30px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
         }
 
-        .task-item {
-            width: 100%; padding: 18px 20px; background: transparent; border: none;
-            border-bottom: 1px solid var(--border-color); display: flex; align-items: center;
-            cursor: pointer; transition: all 0.3s; font-weight: 600; color: var(--text); font-size: 14px; text-align: left;
+        .header-icon {
+            font-size: 60px;
+            color: #ffcc00;
+            margin-bottom: 20px;
         }
-        .task-item:last-child { border-bottom: none; }
 
-        .task-item:hover:not(.is-locked) { background: rgba(0,0,0,0.03); padding-left: 25px; }
-
-        .task-item.is-locked { opacity: 0.5; cursor: not-allowed; background: rgba(0,0,0,0.02); }
-        .task-item.is-done { background: rgba(255, 204, 0, 0.15) !important; color: #000; font-weight: 700; border-left: 4px solid var(--yellow); }
-        
-        /* Animasi dan Gaya saat Error */
-        .task-item.is-error { background: rgba(255, 59, 48, 0.1); color: #ff3b30; animation: shake 0.4s ease; border-left: 4px solid #ff3b30; }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-
-        /* WARNA IKON SOSIAL MEDIA */
-        .icon-wrapper { width: 30px; display: inline-flex; justify-content: center; margin-right: 12px; font-size: 18px; }
-        .icon-yt { color: #ff0000; } /* Merah YouTube */
-        .icon-ig { background: -webkit-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; } /* Gradien Instagram */
-        .icon-tt { color: #000000; filter: drop-shadow(1px 1px 0px #00f2fe) drop-shadow(-1px -1px 0px #fe0979); } /* Efek TikTok */
-        .icon-fb { color: #1877f2; } /* Biru Facebook */
-
-        .lock-icon { margin-left: auto; color: #a1a1a6; font-size: 14px; }
-        .check-icon { margin-left: auto; color: #34c759; font-size: 16px; }
-
-        .info-msg { margin-top: 20px; font-size: 12px; color: #8e8e93; }
-
-        /* Tombol Download / Action Utama */
-        .btn-download {
-            width: 100%; padding: 18px; border-radius: 20px; margin-top: 25px; border: none; font-weight: 800; font-size: 15px;
-            background: var(--yellow); color: #000; box-shadow: 0 10px 20px rgba(255,204,0,0.3);
-            cursor: pointer; transition: 0.3s; text-transform: uppercase;
+        h1 {
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            color: #333;
         }
-        .btn-download:active { transform: scale(0.95); }
 
-        input.custom-input {
-            width: 100%; padding: 15px; border-radius: 15px; border: 1px solid var(--border-color);
-            background: rgba(255,255,255,0.8); color: var(--text); font-size: 14px; outline: none; margin-bottom: 15px;
+        p.subtitle {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        /* --- BAGIAN KOLOM GAGAL (DENYUT RASI BINTANG) --- */
+        .alert-gagal {
+            position: relative;
+            background: #fff5f5;
+            border: 2.5px solid var(--primary-red);
+            color: var(--primary-red);
+            padding: 18px;
+            border-radius: 15px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            z-index: 1;
+            /* Animasi Denyut Utama */
+            animation: pulse-aura 2s infinite ease-in-out;
+            transition: transform 0.2s ease;
+        }
+
+        .alert-gagal:active {
+            transform: scale(0.97);
+        }
+
+        /* Partikel Rasi Bintang */
+        .alert-gagal::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background-image: 
+                radial-gradient(circle, var(--primary-red) 1.5px, transparent 1.5px),
+                radial-gradient(circle, var(--primary-red) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: 0 0, 25px 25px;
+            opacity: 0.15;
+            z-index: -1;
+            animation: star-rotate 20s linear infinite;
+        }
+
+        /* Efek Kilauan Nebula */
+        .alert-gagal::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(255, 77, 77, 0.15) 0%, transparent 70%);
+            animation: twinkle 3s infinite alternate;
+        }
+
+        @keyframes pulse-aura {
+            0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.4); transform: scale(1); }
+            50% { box-shadow: 0 0 20px 5px rgba(255, 77, 77, 0); transform: scale(1.02); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); transform: scale(1); }
+        }
+
+        @keyframes star-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; }
+            100% { opacity: 0.7; }
+        }
+
+        /* --- LIST ITEMS --- */
+        .list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .list-item {
+            background: #fdfdfd;
+            border: 1px solid #eee;
+            padding: 15px 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .list-item i.brand {
+            font-size: 20px;
+            margin-right: 15px;
+        }
+
+        .list-item .left-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .fa-youtube { color: #ff0000; }
+        .fa-instagram { color: #e1306c; }
+        .fa-tiktok { color: #000; }
+        .fa-facebook { color: #1877f2; }
+        .fa-lock { color: #ccc; font-size: 14px; }
+
+        .footer-text {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #999;
+            line-height: 1.5;
+        }
+
+        /* Responsive HP */
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+                border-radius: 20px;
+            }
+            h1 { font-size: 20px; }
+            .alert-gagal { font-size: 14px; padding: 15px; }
         }
     </style>
 </head>
 <body>
 
-<div id="bg-light"></div>
-<div class="wrapper">
-    <div class="glass-card" id="app"></div>
-</div>
+    <div class="container">
+        <div class="header-icon">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+        
+        <h1>Verifikasi Ganda</h1>
+        <p class="subtitle">Selesaikan langkah satu per satu untuk membuka link</p>
 
-<script>
-    // DATA SOSIAL MEDIA BESERTA CLASS WARNANYA
-    const mySocials = [
-        { n: "Subscribe YT Utama", i: "fab fa-youtube icon-yt", l: "https://youtube.com/@dickynews" },
-        { n: "Subscribe YT Kedua", i: "fab fa-youtube icon-yt", l: "https://www.youtube.com/@GODickyNews" },
-        { n: "Follow Instagram", i: "fab fa-instagram icon-ig", l: "https://www.instagram.com/dickynews" },
-        { n: "Follow TikTok", i: "fab fa-tiktok icon-tt", l: "https://www.tiktok.com/@dickynewsyt" },
-        { n: "Follow Facebook", i: "fab fa-facebook icon-fb", l: "https://www.facebook.com/dickynews45" }
-    ];
+        <div class="alert-gagal" onclick="location.reload()">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>Gagal! Klik ulang Subscribe YT Utama</span>
+        </div>
 
-    const params = new URLSearchParams(window.location.search);
-    const app = document.getElementById("app");
-
-    if(!params.get("v")) {
-        // --- HALAMAN GENERATOR LINK ---
-        app.innerHTML = `
-            <i class="fas fa-link header-icon"></i>
-            <h2>LINK GENERATOR</h2>
-            <span class="sub-text">Bikin link proteksi ala Dicky News</span>
-            <input id="inp" class="custom-input" placeholder="Paste URL Tujuan Disini...">
-            <button class="btn-download" onclick="buat()">GENERATE LINK</button>
-            <div id="res"></div>
-        `;
-        window.buat = () => {
-            const val = document.getElementById("inp").value.trim();
-            if(!val) return alert("Isi link dulu ya!");
-            const encoded = btoa(val).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
-            const finalUrl = window.location.origin + window.location.pathname + "?v=" + encoded;
-            document.getElementById("res").innerHTML = `
-                <div style="margin-top:20px; border-top:1px solid var(--border-color); padding-top:15px;">
-                    <p style="font-size:12px; color:#8e8e93; margin-bottom:8px;">Link berhasil dibuat, klik untuk copy:</p>
-                    <input readonly value="${finalUrl}" onclick="this.select(); document.execCommand('copy'); alert('Berhasil Disalin!');" class="custom-input" style="text-align:center; color:#007aff; font-weight:bold; cursor:pointer;">
+        <div class="list-container">
+            <div class="list-item">
+                <div class="left-content">
+                    <i class="fab fa-youtube brand"></i>
+                    <span>Subscribe YT Kedua</span>
                 </div>
-            `;
-        };
-    } else {
-        // --- HALAMAN VERIFIKASI (UNLOCKER) ---
-        let target = "https://dickynews.github.io/home";
-        try { target = atob(params.get("v").replace(/-/g, '+').replace(/_/g, '/')); } catch(e) {}
-
-        app.innerHTML = `
-            <i class="fas fa-shield-alt header-icon"></i>
-            <h2>VERIFIKASI GANDA</h2>
-            <span class="sub-text">Selesaikan langkah satu per satu untuk membuka link</span>
-            <div class="task-list" id="tasks"></div>
-            <div id="info-box" class="info-msg">
-                <i class="fas fa-info-circle"></i> Selesaikan misi yang aktif.<br>Misi berikutnya akan terbuka otomatis.
+                <i class="fas fa-lock"></i>
             </div>
-            <div id="final"></div>
-        `;
 
-        let doneCount = 0;
-        const taskButtons = [];
+            <div class="list-item">
+                <div class="left-content">
+                    <i class="fab fa-instagram brand"></i>
+                    <span>Follow Instagram</span>
+                </div>
+                <i class="fas fa-lock"></i>
+            </div>
 
-        mySocials.forEach((s, idx) => {
-            let b = document.createElement("button");
-            b.className = "task-item";
-            
-            // Kunci tugas selain yang pertama
-            if(idx > 0) b.classList.add("is-locked");
+            <div class="list-item">
+                <div class="left-content">
+                    <i class="fab fa-tiktok brand"></i>
+                    <span>Follow TikTok</span>
+                </div>
+                <i class="fas fa-lock"></i>
+            </div>
 
-            // Pasang ikon gembok jika terkunci
-            const lockHtml = idx > 0 ? `<i class="fas fa-lock lock-icon"></i>` : "";
-            b.innerHTML = `<div class="icon-wrapper"><i class="${s.i}"></i></div> <span>${s.n}</span> ${lockHtml}`;
-            b.dataset.failed = "false";
-            taskButtons.push(b);
+            <div class="list-item">
+                <div class="left-content">
+                    <i class="fab fa-facebook brand"></i>
+                    <span>Follow Facebook</span>
+                </div>
+                <i class="fas fa-lock"></i>
+            </div>
+        </div>
 
-            b.onclick = () => {
-                if(b.classList.contains("is-locked") || b.classList.contains("is-done") || b.disabled) return;
+        <div class="footer-text">
+            <i class="fas fa-info-circle"></i><br>
+            Selesaikan misi yang aktif.<br>
+            Misi berikutnya akan terbuka otomatis.
+        </div>
+    </div>
 
-                window.open(s.l, "_blank");
-                b.disabled = true;
-                b.classList.remove("is-error");
-                
-                let timeLeft = 7; // Durasi tunggu pengecekan
-                b.innerHTML = `<div class="icon-wrapper"><i class="fas fa-spinner fa-spin" style="color:#8e8e93"></i></div> <span>Mengecek ${timeLeft}s...</span>`;
-
-                let timer = setInterval(() => {
-                    timeLeft--;
-                    b.innerHTML = `<div class="icon-wrapper"><i class="fas fa-spinner fa-spin" style="color:#8e8e93"></i></div> <span>Mengecek ${timeLeft}s...</span>`;
-                    
-                    if(timeLeft < 0) {
-                        clearInterval(timer);
-                        b.disabled = false;
-
-                        if(b.dataset.failed === "false") {
-                            // KLIK PERTAMA: Gagal (Sistem Pancingan)
-                            b.dataset.failed = "true";
-                            b.classList.add("is-error");
-                            b.innerHTML = `<div class="icon-wrapper"><i class="fas fa-exclamation-circle"></i></div> <span>Gagal! Klik ulang ${s.n}</span>`;
-                        } else {
-                            // KLIK KEDUA: Berhasil
-                            b.classList.remove("is-error");
-                            b.classList.add("is-done");
-                            b.innerHTML = `<div class="icon-wrapper"><i class="${s.i}"></i></div> <span>${s.n} Berhasil</span> <i class="fas fa-check-circle check-icon"></i>`;
-                            doneCount++;
-
-                            // Buka gembok tugas selanjutnya
-                            if(idx + 1 < mySocials.length) {
-                                let nextBtn = taskButtons[idx+1];
-                                nextBtn.classList.remove("is-locked");
-                                nextBtn.innerHTML = `<div class="icon-wrapper"><i class="${mySocials[idx+1].i}"></i></div> <span>${mySocials[idx+1].n}</span>`;
-                            }
-
-                            // Jika semua selesai, tampilkan tombol download
-                            if(doneCount >= mySocials.length) {
-                                document.getElementById("info-box").style.display = "none";
-                                document.getElementById("final").innerHTML = `
-                                    <button class="btn-download" onclick="window.location.href='${target}'">
-                                        <i class="fas fa-download"></i> DOWNLOAD SEKARANG
-                                    </button>
-                                `;
-                            }
-                        }
-                    }
-                }, 1000);
-            };
-            document.getElementById("tasks").appendChild(b);
-        });
-    }
-</script>
 </body>
 </html>
